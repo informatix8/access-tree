@@ -1,0 +1,119 @@
+/// Add attribute selector styles to provide a range of margin-left indentation levels for tree actions
+/// @param {Number} $max-levels [$ta-tree-prefix-max-actions] - create this many indentation levels, start counting from 1 to this number
+/// @param {Unit} $margin-left [$ta-tree-content-margin-left] - the indentation measurement multiplier
+@mixin ta-tree-action-indent($max-levels: $ta-tree-prefix-max-actions, $margin-left: $ta-tree-content-margin-left) {
+    @for $i from 1 through $max-levels {
+        [ta-tree-prefix-actions='#{$i}'] {
+            margin-left: $margin-left * $i;
+        }
+    }
+}
+
+/// Add attribute selector styles to provide a range of padding-left indentation levels for tree nodes
+/// @param {Number} $max-levels [$ta-tree-max-levels] - create this many indentation levels, start counting from 2 to this number
+/// @param {Unit} $base-padding [$ta-tree-body-padding-horizontal] - the base left/right padding of a node body
+/// @param {Unit} $action-padding [$ta-tree-action-margin-right] - how much space between adjacent actions
+@mixin ta-tree-level-indent($max-levels: $ta-tree-max-levels, $base-padding: $ta-tree-body-padding-horizontal, $action-padding: $ta-tree-action-margin-right) {
+    // build out several levels of sub nodes
+    // must use padding and not margin to the background-color extends the whole width of the tree component
+    // start counting at 2 because we define level 1 without any indentation
+    @for $i from 2 through $max-levels {
+        [ta-tree-level='#{$i}'] > .ta-tree-node > .ta-tree-node-body,
+        [ta-tree-level='#{$i}'] > .ta-tree-node > .ta-tree-node-footer {
+            padding-left: ($base-padding * $i) + ($action-padding * ($i - 1));
+        }
+    }
+}
+
+@mixin ta-tree-row-span($max-levels, $row-height) {
+    @for $i from 1 through $max-levels {
+        [ta-tree-row-span='#{$i}'] {
+            height: $row-height * $i;
+        }
+    }
+}
+
+@mixin ta-tree-suffix-action-indent($max-levels, $action-width) {
+    @for $i from 1 through $max-levels {
+        [ta-tree-suffix-actions='#{$i}'] {
+            right: ($action-width * $i) + $action-width / 2 + $ta-tree-action-margin-right;
+        }
+    }
+}
+
+
+/// Base keyframes mixin used along with animation mixins
+///
+/// @param {String} $keyframes-name - The name of the keyframes.
+@mixin ta-keyframes($keyframes-name: null) {
+    @if ($keyframes-name) {
+        @at-root {
+            @keyframes #{$keyframes-name} {
+                @content;
+
+            }
+        }
+    } @else {
+        @warn 'String with keyframes name should have been passed to mixin';
+    }
+}
+
+/// Adds slide in right animation
+///
+/// @param {Bool} $include-keyframes [false] - Add keyframes to the output or not.
+@mixin ta-slide-in-right($include-keyframes: false) {
+    animation-delay: 0;
+    animation-duration: .6s;
+    animation-name: slide-in-right;
+    animation-timing-function: ease;
+
+    @if $include-keyframes {
+        @include ta-keyframes-slide-in-right;
+    }
+}
+
+/// Adds keyframes for slide in right mixin
+///
+@mixin ta-keyframes-slide-in-right {
+    @include ta-keyframes('slide-in-right') {
+        0% {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        50% {
+            transform: translateX(0);
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+}
+
+/**
+*
+* @mixin
+* @section Utility
+* @description
+*  Clear a float
+*
+**/
+@mixin ta-clearfix {
+    &:after {
+        clear: both;
+        content: ' ';
+        display: table;
+    }
+}
+
+/**
+*
+* @mixin
+* @section Reset
+*
+**/
+@mixin ta-button-reset {
+    border: 1px solid transparent;
+    border-radius: 0;
+}

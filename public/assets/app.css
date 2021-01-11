@@ -1,0 +1,23 @@
+body {
+    background-color: #eee;
+    font-family: sans-serif;
+    margin: 0;
+}
+
+#app {
+}
+
+.header {
+    background-color: #ccc;
+}
+
+.main {
+    background-color: #eee;
+}
+
+.header-container,
+.main-container {
+    margin: 0 auto;
+    max-width: 1000px;
+    padding: 16px;
+}

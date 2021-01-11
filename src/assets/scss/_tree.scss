@@ -1,0 +1,488 @@
+@import 'variables';
+@import 'tree.variables';
+@import 'tree.mixins';
+
+// ta-tree is the component outer container
+.ta-tree {
+    @include ta-tree-level-indent;
+
+    font-family: $ta-tree-font-family;
+
+    &.ta-tree-expand-plus { // plus/minus variation
+        .ta-tree-node {
+            &.expanded {
+                > .ta-tree-node-body > .ta-tree-node-prefix > .ta-tree-node-action.ta-tree-expandable-action {
+                    &::before {
+                        content: $ta-tree-expanded-minus-hex; //minus
+                    }
+                }
+            }
+
+            .ta-tree-node-action.ta-tree-expandable-action {
+                font-family: $ta-tree-collapsed-font-family;
+
+                &::before {
+                    content: $ta-tree-collapsed-plus-hex; //plus
+                }
+            }
+        }
+    }
+}
+
+.ta-tree-node-body {
+    speak: normal;
+}
+
+.ta-tree-container {
+    &.json-tree {
+        .ta-tree-node-label,
+        .json-value,
+        .json-separator,
+        .json-open-brace,
+        .json-close-brace,
+        .json-open-bracket,
+        .json-close-bracket {
+            font-family: $ta-tree-json-tree-font-family;
+            font-size: $ta-tree-json-tree-font-size;
+        }
+
+        .json-value,
+        .json-separator {
+            color: $color-gray-lighter;
+        }
+
+        .json-open-bracket,
+        .json-open-brace,
+        .json-value {
+            margin-left: 16px;
+        }
+
+        .json-open-brace,
+        .json-close-brace,
+        .json-open-bracket,
+        .json-close-bracket {
+            color: $color-gray-light;
+        }
+
+        .ta-tree-node {
+            > .ta-tree-node-body {
+                padding: {
+                    bottom: $ta-tree-json-body-padding-bottom;
+                    top: $ta-tree-json-body-padding-top;
+                }
+            }
+        }
+
+        .ta-tree-node-footer {
+            background-color: $ta-tree-node-not-selectable-background;
+        }
+    }
+
+    &.focused {
+        .ta-tree-node.focused > .ta-tree-node-body {
+            box-shadow: 0 0 0 3px #000;
+            outline: none;
+            transition: box-shadow 0.3s ease;
+            z-index: 1;
+        }
+
+        .ta-tree-node.focused > .ta-tree-node-footer {
+            .json-close-bracket,
+            .json-close-brace {
+                //background-color: $color-gold-lighter;
+            }
+        }
+    }
+}
+
+.ta-tree-node {
+    @include ta-tree-action-indent;
+    position: relative;
+
+    &.selected > .ta-tree-node-body {
+        background-color: $ta-tree-node-selected-background;
+
+        .ta-tree-node-action,
+        .ta-tree-node-label {
+            color: $ta-tree-node-selected-color;
+        }
+
+        // scss-lint:disable NestingDepth,SelectorDepth
+        .ta-tree-node-action-drawer {
+            > .ta-tree-node-action {
+                color: $color-base;
+            }
+        }
+        // scss-lint:enable NestingDepth,SelectorDepth
+
+        .ta-tree-node-action.ta-badge {
+            color: $color-base;
+        }
+    }
+
+    &.disabled > .ta-tree-node-body {
+        background-color: $ta-tree-node-disabled-background;
+
+        .ta-tree-node-action,
+        .ta-tree-node-label {
+            color: $ta-tree-node-disabled-color;
+        }
+    }
+
+    // scss-lint:disable NestingDepth,SelectorDepth
+    &.ta-tree-node-body-clickable {
+        > .ta-tree-node-body {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    &.loading {
+        > .ta-tree-node-body {
+            &:hover,
+            &:active {
+                cursor: default;
+            }
+
+            > .ta-tree-node-action,
+            > .ta-tree-node-label {
+                &:hover,
+                &:active {
+                    cursor: default;
+                }
+            }
+        }
+    }
+    // scss-lint:enable NestingDepth,SelectorDepth
+    &.ta-tree-abbreviate-nodes {
+        text-align: center;
+    }
+
+    &.expanded {
+        > .ta-tree-group {
+            display: block;
+        }
+
+        > .ta-tree-node-body > .ta-tree-node-prefix > .ta-tree-node-action.ta-tree-expandable-action {
+            &::before {
+                content: $ta-tree-expanded-chevron-hex; //chevron down
+            }
+        }
+    }
+
+    &.has-or-will-have-children > .ta-tree-node-body {
+        .ta-tree-node-label {
+            color: $ta-tree-node-has-or-will-have-children-color;
+        }
+    }
+
+    &.no-children > .ta-tree-node-body {
+        .ta-tree-node-label {
+            color: $ta-tree-node-no-children-color;
+        }
+    }
+
+    //if user has somehow looked at a node, then it’s okay to truncate the text to one line
+    &.selected,
+    &.expanded.loaded {
+        > .ta-tree-node-body {
+            .ta-tree-node-content,
+            .ta-tree-node-label {
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
+
+    &.expanded.loaded > .ta-tree-node-body {
+        background-color: $ta-tree-node-expanded-loaded-background;
+
+        .ta-tree-node-label {
+            color: $ta-tree-node-expanded-loaded-color;
+        }
+    }
+
+    &.expanded.loaded.selected > .ta-tree-node-body {
+        background-color: $ta-tree-node-expanded-loaded-selected-background;
+
+        .ta-tree-node-label {
+            color: $ta-tree-node-expanded-loaded-selected-color;
+        }
+    }
+
+    &.not-selectable > .ta-tree-node-body {
+        background-color: $ta-tree-node-not-selectable-background;
+
+        .ta-tree-node-label {
+            color: $ta-tree-node-not-selectable-color;
+        }
+    }
+
+    &.selectable.content-hovered > .ta-tree-node-body {
+        .ta-tree-node-label {
+            color: $ta-tree-node-selectable-content-hovered-color;
+        }
+    }
+
+    .ta-tree-expandable-action:hover {
+        color: $ta-tree-node-expandable-action-hovered-color;
+    }
+
+    button.ta-tree-node-action {
+        border-radius: 0;
+        border: 0;
+        padding: 0;
+    }
+
+    .ta-tree-node-action,
+    .ta-tree-node-label {
+        display: inline;
+    }
+
+    // remove icon margins, we’ll manage those next
+    .ta-tree-node-action,
+    .ta-tree-node-action > input[type='checkbox'], //input type=checkbox is a special action we might have
+    .ta-tree-node-action::before {
+        margin: 0;
+    }
+
+    // a node action probably contains an icon, maybe a checkbox
+    .ta-tree-node-action {
+        color: $ta-tree-node-action-color;
+        float: left;
+        margin-right: $ta-tree-action-margin-right;
+        min-width: $ta-tree-action-min-width;
+
+        // last child has no margin
+        &:last-child {
+            margin-right: 0;
+        }
+
+        &:hover {
+            color: $ta-tree-node-action-hover-color;
+        }
+
+        &::before,
+        ::before {
+            speak: none;
+        }
+
+        &.ta-tree-expandable-action {
+            font-family: $ta-tree-expanded-font-family;
+
+            &::before {
+                content: $ta-tree-collapsed-chevron-hex; //chevron right
+            }
+        }
+
+        &.ta-badge {
+            color: $color-base;
+        }
+    }
+
+    .ta-tree-node-action-drawer {
+        display: none;
+
+        @if $ta-tree-animate-drawer {
+            @include ta-slide-in-right(true);
+        }
+
+        align-items: center;
+        background-color: $ta-tree-drawer-background-color;
+        bottom: 0;
+        margin-right: $ta-tree-drawer-margin-right;
+        position: absolute;
+        right: 0;
+        top: 0;
+
+        > .ta-tree-node-action {
+            background-color: $ta-tree-drawer-action-background-color;
+            border-right: 1px solid $ta-tree-drawer-action-border-right;
+            color: $ta-tree-drawer-action-color;
+            flex: 0 1 auto;
+            font-size: $ta-tree-drawer-action-font-size;
+            margin: 0;
+            max-height: $ta-tree-drawer-action-max-height;
+            min-width: $ta-tree-drawer-action-min-width;
+            padding-bottom: $ta-tree-drawer-action-padding-bottom;
+            padding-left: $ta-tree-drawer-action-padding-left;
+            padding-right: $ta-tree-drawer-action-padding-right;
+            padding-top: $ta-tree-drawer-action-padding-top;
+
+            //TODO hover state changes color/background - depends on what user chooses as background color
+
+            // scss-lint:disable NestingDepth,SelectorDepth
+            &:last-child {
+                border-right: 0;
+            }
+            // scss-lint:enable NestingDepth,SelectorDepth
+        }
+    }
+
+    > .ta-tree-node-body {
+        padding-bottom: $ta-tree-body-padding-bottom;
+        padding-left: $ta-tree-body-padding-left;
+        padding-right: $ta-tree-body-padding-right;
+        padding-top: $ta-tree-body-padding-top;
+        position: relative; //for drawer
+    }
+
+    //show it by setting .expanded on the node itself
+    > .ta-tree-group {
+        display: none;
+    }
+
+    .ta-tree-node-prefix {
+        @include ta-clearfix;
+
+        float: left;
+        margin-right: $ta-tree-action-margin-right;
+    }
+
+    .ta-tree-node-suffix {
+        margin-left: $ta-tree-action-margin-right;
+    }
+}
+
+
+.ta-tree-node.ta-tree-abbreviate-nodes,
+.ta-tree-ancestor {
+    .ta-tree-node-action,
+    .ta-tree-node-label {
+        color: $color-gray-warm-light;
+    }
+}
+
+button.ta-tree-node-action {
+    @include ta-button-reset;
+}
+
+button.ta-tree-expandable-action {
+    padding: 0;
+}
+
+html.no-touch .ta-tree.ta-tree-draggable {
+    .ta-tree-node-body {
+        &:hover {
+            cursor: grab;
+        }
+
+        &.dragging {
+            border: 1px dashed $color-gray-warm-light;
+            cursor: grabbing;
+        }
+    }
+
+    .ta-tree-toggle-drag-mode {
+        display: none;
+    }
+}
+
+// scss-lint:disable NestingDepth,SelectorDepth
+html.touch .ta-tree .ta-tree-node {
+    .ta-tree-node-action {
+        > input[type='checkbox'] {
+            vertical-align: middle;
+        }
+    }
+}
+// scss-lint:enable NestingDepth,SelectorDepth
+
+html.touch .ta-tree.ta-tree-draggable,
+html.no-touch .ta-tree.ta-force-touch.ta-tree-draggable {
+    &.ta-tree-drag-mode {
+        .ta-tree-node-suffix {
+            .ta-tree-node-action:not(.ta-tree-drag-handle) {
+                display: none;
+            }
+
+            .ta-tree-drag-handle {
+                display: block;
+            }
+        }
+
+        .ta-tree-node-body,
+        .ta-tree-drag-handle {
+            &:hover {
+                cursor: grab;
+            }
+
+            &.dragging {
+                cursor: grabbing;
+            }
+        }
+    }
+
+    .ta-tree-node-suffix {
+        .ta-tree-drag-handle {
+            display: none;
+        }
+    }
+
+    .ta-tree-node-body {
+        &:hover {
+            cursor: default;
+        }
+    }
+
+    .ta-tree-toggle-drag-mode {
+        display: inline;
+    }
+}
+
+.ta-tree {
+    // scss-lint:disable NestingDepth,SelectorDepth
+    &.ta-tree-content-no-wrap {
+        .ta-tree-node-content,
+        .ta-tree-node-label {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    .ta-tree-node {
+        .ta-tree-node-body {
+            display: flex;
+        }
+
+        .ta-tree-node-action-drawer,
+        .ta-tree-node-infix,
+        .ta-tree-node-suffix,
+        .ta-tree-node-prefix {
+            align-items: baseline;
+            flex: 0 1 auto;
+            white-space: nowrap;
+        }
+
+        .ta-tree-node-infix,
+        .ta-tree-node-suffix,
+        .ta-tree-node-prefix,
+        .ta-tree-node-action-drawer.expanded {
+            display: flex;
+        }
+
+        .ta-tree-node-suffix {
+            float: none;
+
+            &.ta-node-suffix-fallback {
+                display: none;
+            }
+        }
+
+        .ta-tree-node-action {
+            flex: 0 1 auto;
+            float: none;
+        }
+
+        .ta-tree-node-content {
+            flex: 1 1 auto;
+            margin-left: 0;
+        }
+    }
+    // scss-lint:enable NestingDepth,SelectorDepth
+}

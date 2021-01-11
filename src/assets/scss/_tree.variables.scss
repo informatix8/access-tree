@@ -1,0 +1,248 @@
+/// Font for entire tree
+///
+/// Type @List
+$ta-tree-font-family: sans-serif !default;
+$ta-tree-json-tree-font-family: Consolas, Menlo, Monaco, 'Lucida Console', 'Courier New', monospace;
+$ta-tree-json-tree-font-size: 13px;
+
+/// Top padding between nodes
+///
+/// Type @Unit
+$ta-tree-body-padding-top: 8px !default;
+$ta-tree-json-body-padding-top: 4px !default;
+
+/// Bottom padding between nodes
+///
+/// Type @Unit
+$ta-tree-body-padding-bottom: 8px !default;
+$ta-tree-json-body-padding-bottom: 4px !default;
+
+/// Horizontal padding on the sides of a node
+///
+/// Type @Unit
+$ta-tree-body-padding-horizontal: 16px !default;
+
+/// Arrow that joins ancestor nodes
+///
+/// Type @URL
+$ta-tree-ancestor-arrow-down-url: '../images/ta-tree-nav-arrow-down.svg' !default;
+
+/// Arrow that joins ancestor nodes, in active state
+///
+/// Type @URL
+$ta-tree-ancestor-arrow-down-active-url: '../images/ta-tree-nav-arrow-down-active.svg' !default;
+
+/// Arrow that joins ancestor nodes width
+///
+/// Type @Unit
+$ta-tree-ancestor-arrow-down-width: 16px !default;
+
+/// Arrow that joins ancestor nodes height
+///
+/// Type @Unit
+$ta-tree-ancestor-arrow-down-height: 10px !default;
+
+/// Vertical padding between ancestor nodes
+///
+/// Type @Unit
+$ta-tree-ancestor-padding-vertical: 4px !default;
+
+/// Horizontal padding between ancestor nodes
+///
+/// Type @Unit
+$ta-tree-ancestor-padding-horizontal: 8px !default;
+
+/// Top padding for last ancestor node
+///
+/// Type @Unit
+$ta-tree-last-ancestor-padding-top: 16px !default;
+
+
+/// Left padding on the side of a node
+///
+/// Type @Unit
+$ta-tree-body-padding-left: $ta-tree-body-padding-horizontal !default;
+
+/// Right padding on the side of a node
+///
+/// Type @Unit
+$ta-tree-body-padding-right: $ta-tree-body-padding-horizontal !default;
+
+/// Margin between actions
+///
+/// Type @Unit
+$ta-tree-action-margin-right: 4px !default;
+
+/// Number of hierarchy indentations to generate
+///
+/// Type @Number
+$ta-tree-max-levels: 25 !default;
+
+/// Number of action indentations to generate
+///
+/// Type @Number
+$ta-tree-prefix-max-actions: 10 !default;
+
+/// Minimum width of an action, used to handle small native checkboxes
+///
+/// Type @Unit
+$ta-tree-action-min-width: 32px !default;
+
+/// Indentation for content to make room for left side actions
+///
+/// Type @Unit
+$ta-tree-content-margin-left: $ta-tree-action-min-width + $ta-tree-action-margin-right !default;
+
+/// Border between first level nodes
+///
+/// Type @Unit
+$ta-tree-rule-width: 0 !default;
+
+/// Border color between first level nodes
+///
+/// Type @Unit
+$ta-tree-rule-color: $color-gray-lightest !default;
+
+/// Add Animation to actions drawer upon open
+///
+/// Type @Boolean
+$ta-tree-animate-drawer: true !default;
+
+/// Font for collapsed icon
+///
+/// Type @List
+$ta-tree-collapsed-font-family: 'FontAwesome' !default;
+
+/// Hex code for collapsed chevron font icon
+///
+/// Type @List
+$ta-tree-collapsed-chevron-hex: '\f105' !default;
+
+/// Hex code for collapsed plus font icon
+///
+/// Type @List
+$ta-tree-collapsed-plus-hex: '\f067' !default;
+
+/// Font for expanded icon
+///
+/// Type @List
+$ta-tree-expanded-font-family: 'FontAwesome' !default;
+
+/// Hex code for expanded chevron font icon
+///
+/// Type @List
+$ta-tree-expanded-chevron-hex: '\f107' !default;
+
+/// Hex code for expanded minus font icon
+///
+/// Type @List
+$ta-tree-expanded-minus-hex: '\f068' !default;
+
+/// Drawer margin right to align it with the rightmost suffix action
+///
+/// Type @Unit
+$ta-tree-drawer-margin-right: 8px !default;
+
+/// Drawer background color
+///
+/// Type @Color
+$ta-tree-drawer-background-color: $color-white !default;
+
+/// Drawer action base background color
+///
+/// Type @Color
+$ta-tree-drawer-action-background-color: $color-gray-lighter !default;
+
+/// Drawer action text color
+///
+/// Type @Color
+$ta-tree-drawer-action-color: $color-white !default;
+
+/// Drawer action padding
+///
+/// Type @Unit
+$ta-tree-drawer-action-padding: 8px !default;
+
+/// Drawer action padding left
+///
+/// Type @Unit
+$ta-tree-drawer-action-padding-left: $ta-tree-drawer-action-padding !default;
+
+/// Drawer action padding right
+///
+/// Type @Unit
+$ta-tree-drawer-action-padding-right: $ta-tree-drawer-action-padding !default;
+
+/// Drawer action padding bottom
+///
+/// Type @Unit
+$ta-tree-drawer-action-padding-bottom: $ta-tree-drawer-action-padding !default;
+
+/// Drawer action padding top
+///
+/// Type @Unit
+$ta-tree-drawer-action-padding-top: $ta-tree-drawer-action-padding !default;
+
+/// Drawer action font size
+///
+/// Type @Unit
+$ta-tree-drawer-action-font-size: 18px !default;
+
+/// Drawer action border right - separates adjacent actions visually
+///
+/// Type @Unit
+$ta-tree-drawer-action-border-right: $color-white !default;
+
+/// Drawer action max height - if a node label wraps, the actions should only be so tall
+///
+/// Type @Unit
+$ta-tree-drawer-action-max-height: 38px !default;
+
+/// Drawer action min width
+///
+/// Type @Unit
+$ta-tree-drawer-action-min-width: 35px !default;
+
+/// Focus outline default offset
+///
+/// @type Unit
+$ta-a11y-focus-outline-offset: 0 !default;
+
+/// Focus outline default width
+///
+/// @type Unit
+$ta-a11y-focus-outline-width: 2px !default;
+
+
+$tree-node-label-color: $color-base;
+$ta-tree-node-action-color: $color-base;
+$ta-tree-node-action-hover-color: $color-primary;
+
+$ta-tree-node-selected-background: $color-gray-cool-light;
+$ta-tree-node-selected-color: $color-base;
+
+$ta-tree-node-disabled-background: $color-white;
+$ta-tree-node-disabled-color: $color-gray-warm-light;
+
+$ta-tree-node-expanded-loaded-background: $color-white;
+$ta-tree-node-expanded-loaded-color: $color-base;
+
+$ta-tree-node-loaded-background: $color-white;
+$ta-tree-node-loaded-color: $color-base;
+
+$ta-tree-node-expanded-loaded-selected-background: $color-white;
+$ta-tree-node-expanded-loaded-selected-color: $color-base;
+
+$ta-tree-node-selectable-content-hovered-color: $color-primary;
+
+$ta-tree-node-not-selectable-background: $color-white;
+$ta-tree-node-not-selectable-color: $color-base;
+
+$ta-tree-node-expandable-action-hovered-color: $color-primary;
+
+$ta-tree-node-has-or-will-have-children-color: $color-base;
+$ta-tree-node-no-children-color: $color-base;
+
+$ta-tree-node-focus-outline-color: $color-base;
+$ta-tree-node-focus-outline-offset: 1px;
+$ta-tree-node-focus-outline-width: 2px;
