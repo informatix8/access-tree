@@ -2,12 +2,14 @@
     <div class="ta-tree-node ta-tree-node-body-clickable" role="treeitem" v-bind:id="componentId" v-bind:class="nodeBodyClasses" v-bind:aria-expanded="aria.expanded" v-bind:aria-selected="aria.selected" v-bind:aria-level="treeLevel">
         <div class="ta-tree-node-body" v-bind:tabindex="tabindex" v-bind:id="nodeBodyId" v-on:click="onClickNodeBody" v-on:mouseenter="onMouseEnterBody" v-on:mouseleave="onMouseLeaveBody" v-on:focusin="onFocusIn" v-on-clickaway="onClickAway" @keyup.enter="onEnterKey" @keyup.space="onSpaceKey" @keydown.space.prevent.stop="curtail" @keyup.up.prevent.stop="onArrowUpKey" @keyup.down.prevent.stop="onArrowDownKey" @keydown.up.prevent="curtail" @keydown.down.prevent="curtail" @keyup.left.prevent="onArrowLeftKey" @keyup.right.prevent="onArrowRightKey" @keydown.left.prevent="curtail" @keydown.right.prevent="curtail" @keyup.home.prevent="onHomeKey" @keyup.end.prevent="onEndKey" @keydown.home.prevent="curtail" @keydown.end.prevent="curtail">
             <div class="ta-tree-node-prefix">
-                <div class="ta-tree-node-action" v-show="node.loading()"><span class="fa fa-spinner" aria-label="Loading children."></span></div>
-                <button class="ta-tree-node-action ta-tree-expandable-action" tabindex="-1" v-if="node.hasOrWillHaveChildren() &amp;&amp; node.loading() === false" v-on:click.stop="onClickExpandCollapse"></button>
-                <div class="ta-tree-node-action placeholder" v-if="!node.hasOrWillHaveChildren()"></div>
-                <div class="ta-tree-node-action" v-if="model.enableCheckboxes !== false">
-                    <input class="ta-tree-checkbox" v-model="localNodeChecked" v-indeterminate="indeterminate" type="checkbox" tabindex="-1" v-on:click.stop="onClickCheckbox">
-                </div>
+                <slot name="node-prefix" :node="node" :model="model" :treeNode="this">
+                    <div class="ta-tree-node-action" v-show="node.loading()"><span class="fa fa-spinner" aria-label="Loading children."></span></div>
+                    <button class="ta-tree-node-action ta-tree-expandable-action" tabindex="-1" v-if="node.hasOrWillHaveChildren() &amp;&amp; node.loading() === false" v-on:click.stop="onClickExpandCollapse"></button>
+                    <div class="ta-tree-node-action placeholder" v-if="!node.hasOrWillHaveChildren()"></div>
+                    <div class="ta-tree-node-action" v-if="model.enableCheckboxes !== false">
+                        <input class="ta-tree-checkbox" v-model="localNodeChecked" v-indeterminate="indeterminate" type="checkbox" tabindex="-1" v-on:click.stop="onClickCheckbox">
+                    </div>
+                </slot>
             </div>
             <div class="ta-tree-node-content" v-bind:ta-tree-prefix-actions="prefixActionCount" v-bind:class="nodeContentClasses" v-on:mouseenter="onMouseEnterContent" v-on:mouseleave="onMouseLeaveContent"><a class="ta-tree-node-label" tabindex="-1" v-bind:title="truncatedTitleText"><span>{{ truncatedLabelText }}</span><span v-if="node.value !== undefined"><span class="json-separator" aria-separator="true">:</span><span class="json-value">{{ node.value }}</span></span><span v-else-if="node.childType === 'object' &amp;&amp; node.text !== '{'" aria-separator="true"><span class="json-separator">:</span><span class="json-open-brace">{</span></span><span v-else-if="node.childType === 'array' &amp;&amp; node.text !== '['" aria-separator="true"><span class="json-separator">:</span><span class="json-open-bracket">[</span></span></a></div>
             <div class="ta-tree-node-suffix">
@@ -18,7 +20,18 @@
             </div>
         </div>
         <div class="ta-tree-group" role="group" v-if="node.hasOrWillHaveChildren()" v-show="node.expanded()" v-bind:ta-tree-level="treeLevel + 1">
-            <ta-tree-node v-for="(treeNode) in treeNodes" v-bind:model="model" v-bind:tree-level="treeLevel + 1" v-bind:node="treeNode" v-bind:node-checked="treeNode.checked()" v-bind:tree-focused="treeFocused" v-bind:key="treeNode.id"></ta-tree-node>
+            <ta-tree-node v-for="(treeNode) in treeNodes" v-bind:model="model" v-bind:tree-level="treeLevel + 1" v-bind:node="treeNode" v-bind:node-checked="treeNode.checked()" v-bind:tree-focused="treeFocused" v-bind:key="treeNode.id">
+                <template v-slot:node-prefix="slotProps">
+                    <slot name="node-prefix" :node="slotProps.node" :treeNode="slotProps.treeNode">
+                        <div class="ta-tree-node-action" v-show="slotProps.node.loading()"><span class="fa fa-spinner" aria-label="Loading children."></span></div>
+                        <button class="ta-tree-node-action ta-tree-expandable-action" tabindex="-1" v-if="slotProps.node.hasOrWillHaveChildren() &amp;&amp; slotProps.node.loading() === false" @click.stop="slotProps.treeNode.onClickExpandCollapse"></button>
+                        <div class="ta-tree-node-action placeholder" v-if="!slotProps.node.hasOrWillHaveChildren()"></div>
+                        <div class="ta-tree-node-action" v-if="slotProps.treeNode.model.enableCheckboxes !== false">
+                            <input class="ta-tree-checkbox" v-model="slotProps.treeNode.localNodeChecked" v-indeterminate="slotProps.treeNode.indeterminate" type="checkbox" tabindex="-1" @click.stop="slotProps.treeNode.onClickCheckbox">
+                        </div>
+                    </slot>
+                </template>
+            </ta-tree-node>
         </div>
         <div class="ta-tree-node-footer" v-bind:tree-level="treeLevel">
             <div class="json-close-bracket" v-if="node.childType === 'array' &amp;&amp; node.expanded()" aria-separator="true">]</div>

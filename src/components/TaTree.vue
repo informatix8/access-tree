@@ -13,7 +13,18 @@
                 <slot name="header"></slot>
                 <div class="ta-tree ta-tree-has-suffix ta-tree-expand-plus">
                     <div class="ta-tree-container" role="tree" v-bind:id="componentId" v-bind:class="treeClasses" @keyup="onSignificantKey" v-on:focusin="onFocusIn" v-on:keydown.tab="onTabOutKey" v-on-clickaway="onClickAway">
-                        <ta-tree-node v-for="(treeNode) in treeNodes" v-bind:model="model" v-bind:tree-level="1" v-bind:node="treeNode" v-bind:node-checked="treeNode.checked()" v-bind:tree-focused="focused" v-bind:key="treeNode.id"></ta-tree-node>
+                        <ta-tree-node v-for="(treeNode) in treeNodes" v-bind:model="model" v-bind:tree-level="1" v-bind:node="treeNode" v-bind:node-checked="treeNode.checked()" v-bind:tree-focused="focused" v-bind:key="treeNode.id">
+                            <template v-slot:node-prefix="slotProps">
+                                <slot name="node-prefix" :node="slotProps.node" :treeNode="slotProps.treeNode">
+                                    <div class="ta-tree-node-action" v-show="slotProps.node.loading()"><span class="fa fa-spinner" aria-label="Loading children."></span></div>
+                                    <button class="ta-tree-node-action ta-tree-expandable-action" tabindex="-1" v-if="slotProps.node.hasOrWillHaveChildren() &amp;&amp; slotProps.node.loading() === false" @click.stop="slotProps.treeNode.onClickExpandCollapse"></button>
+                                    <div class="ta-tree-node-action placeholder" v-if="!slotProps.node.hasOrWillHaveChildren()"></div>
+                                    <div class="ta-tree-node-action" v-if="slotProps.treeNode.model.enableCheckboxes !== false">
+                                        <input class="ta-tree-checkbox" v-model="slotProps.treeNode.localNodeChecked" v-indeterminate="slotProps.treeNode.indeterminate" type="checkbox" tabindex="-1" @click.stop="slotProps.treeNode.onClickCheckbox">
+                                    </div>
+                                </slot>
+                            </template>
+                        </ta-tree-node>
                     </div>
                 </div>
             </div>
@@ -267,8 +278,8 @@ export default {
          */
         doResize() {
             if (typeof window !== 'undefined') {
-                const mq = window.matchMedia('(min-width: ' + this.model.autoCollapseThreshold + 'px)')
-                this.aboveAutoCollapseThreshold = mq();
+                const mq = window.matchMedia('(min-width: ' + this.model.autoCollapseThreshold + 'px)');
+                this.aboveAutoCollapseThreshold = mq.matches;
             }
             this.belowAutoCollapseThreshold = !this.aboveAutoCollapseThreshold;
 
