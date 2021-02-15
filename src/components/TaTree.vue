@@ -13,7 +13,7 @@
                 <slot name="header"></slot>
                 <div class="ta-tree ta-tree-has-suffix ta-tree-expand-plus">
                     <div class="ta-tree-container" role="tree" v-bind:id="componentId" v-bind:class="treeClasses" @keyup="onSignificantKey" v-on:focusin="onFocusIn" v-on:keydown.tab="onTabOutKey" v-on-clickaway="onClickAway">
-                        <ta-tree-node v-for="(treeNode) in treeNodes" v-bind:model="model" v-bind:tree-level="1" v-bind:node="treeNode" v-bind:node-checked="treeNode.checked()" v-bind:tree-focused="focused" v-bind:key="treeNode.id">
+                        <ta-tree-node v-for="(treeNode) in treeNodes" v-bind:model="model" v-bind:tree-level="1" v-bind:node="treeNode" v-bind:node-checked="treeNode.checked()" v-bind:tree-focused="focused" v-bind:key="treeNode.id" v-on:node-action="$emit('node-action', $event)">
                             <template v-slot:node-prefix="slotProps">
                                 <slot name="node-prefix" :node="slotProps.node" :treeNode="slotProps.treeNode">
                                     <div class="ta-tree-node-action" v-show="slotProps.node.loading()"><span class="fa fa-spinner" aria-label="Loading children."></span></div>
@@ -443,7 +443,3 @@ export default {
     }
 };
 </script>
-
-<style lang="scss">
-@import "@/assets/scss/_tree";
-</style>

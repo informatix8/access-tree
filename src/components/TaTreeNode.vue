@@ -16,11 +16,11 @@
                 <div class="ta-tree-node-action" v-if="node.loadingContent"><span class="fa fa-spinner" aria-label="Loading content."></span></div>
                 <button class="ta-tree-node-action fa fa-check" v-if="node.requiredField" tabindex="-1"></button>
                 <button class="ta-tree-node-action fa fa-exclamation-triangle" v-if="node.stripField" tabindex="-1"></button>
-                <button class="ta-tree-node-action fa fa-floppy-o" v-if="node.mutableField" tabindex="-1"></button><a class="ta-tree-node-action back-end-model" v-if="node.backEndModel !== undefined" tabindex="-1">{{ node.backEndModel }}</a>
+                <button class="ta-tree-node-action fa fa-floppy-o" v-if="node.mutableField" tabindex="-1"></button><a class="ta-tree-node-action back-end-model" v-if="node.backEndModel !== undefined" tabindex="-1" @click="$emit('node-action', node)">{{ node.backEndModel }}</a>
             </div>
         </div>
         <div class="ta-tree-group" role="group" v-if="node.hasOrWillHaveChildren()" v-show="node.expanded()" v-bind:ta-tree-level="treeLevel + 1">
-            <ta-tree-node v-for="(treeNode) in treeNodes" v-bind:model="model" v-bind:tree-level="treeLevel + 1" v-bind:node="treeNode" v-bind:node-checked="treeNode.checked()" v-bind:tree-focused="treeFocused" v-bind:key="treeNode.id">
+            <ta-tree-node v-for="(treeNode) in treeNodes" v-bind:model="model" v-bind:tree-level="treeLevel + 1" v-bind:node="treeNode" v-bind:node-checked="treeNode.checked()" v-bind:tree-focused="treeFocused" v-bind:key="treeNode.id" @node-action="$emit('node-action', $event)">
                 <template v-slot:node-prefix="slotProps">
                     <slot name="node-prefix" :node="slotProps.node" :treeNode="slotProps.treeNode">
                         <div class="ta-tree-node-action" v-show="slotProps.node.loading()"><span class="fa fa-spinner" aria-label="Loading children."></span></div>
@@ -121,6 +121,9 @@ export default {
         }
     },
     computed: {
+        nodeFocused() {
+            return this.node.focused();
+        },
         prefixActionCount() {
             let count = 0;
 
@@ -150,7 +153,7 @@ export default {
             return {
                 'body-hovered': this.bodyHovered === true,
                 'content-hovered': this.contentHovered === true,
-                focused: this.node.focused(),
+                focused: this.nodeFocused,
                 selected: this.node.selected(),
                 selectable: this.node.selectable(),
                 'not-selectable': !this.node.selectable(),
